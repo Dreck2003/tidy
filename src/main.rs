@@ -1,3 +1,6 @@
+mod colors;
+use colors::utils::Color;
+
 fn main() {
-    println!("Hello, world!");
+    Color::yellow("Hello, world!").println()
 }
