@@ -208,7 +208,7 @@ fn select_proyect() {
 
     Color::green("?").print();
     Color::white(" Choose the proyect: ").println();
-    let joined = join_proyect_to_print(&proyects, |c| c.to_string());
+    let joined = join_proyect_to_print(&proyects, |c| c.to_string() + ". ");
 
     println!("{}", joined); //Print all proyects
     let _ = stdout().flush();
@@ -228,6 +228,18 @@ fn select_proyect() {
         process::exit(1)
     }
     select_proyect_and_open(proyects[(index - 1) as usize]);
+    let res = if cfg!(target_os = "windows") {
+        Command::new("cmd")
+            .args(["/c", "cd", proyects[(index - 1) as usize]])
+            .output()
+    } else {
+        Command::new("sh")
+            .args(["-c", "cd ", proyects[(index - 1) as usize]])
+            .output()
+    };
+    if let Err(e) = res {
+        eprintln!("{}", e.to_string());
+    }
     Color::green(&format!("{}", proyects[(index - 1) as usize])).println();
 }
 

@@ -1,12 +1,25 @@
 use std::{
+    env,
     fs::{self, OpenOptions},
     io::Write,
-    path::Path,
-    writeln,
+    path::{Path, PathBuf},
+    process, writeln,
 };
 
+pub fn get_exe_path() -> PathBuf {
+    let res = env::current_exe();
+    if let Err(e) = &res {
+        eprintln!("{}", e.to_string());
+        process::exit(1);
+    }
+    let mut binding = res.unwrap();
+    binding.pop();
+    binding.push("proyects.txt");
+    return binding;
+}
+
 pub fn write_to_proyects_db(line: &str) {
-    if Path::new("proyects.txt").exists() {
+    if Path::new(&get_exe_path()).exists() {
         if let Err(e) = add_proyect_path(line) {
             eprintln!("{}", e);
         }
@@ -22,7 +35,7 @@ pub fn write_to_proyects_db(line: &str) {
 }
 
 fn create_proyects_db() -> Result<(), String> {
-    let res = fs::File::create("proyects.txt");
+    let res = fs::File::create(get_exe_path());
 
     if let Err(e) = res {
         return Err(e.to_string());
@@ -32,8 +45,8 @@ fn create_proyects_db() -> Result<(), String> {
 }
 
 pub fn read_proyects() -> String {
-    if Path::new("proyects.txt").exists() {
-        match fs::read_to_string("proyects.txt") {
+    if Path::new(&get_exe_path()).exists() {
+        match fs::read_to_string(get_exe_path()) {
             Ok(s) => return s,
             Err(_) => "".to_string(),
         }
@@ -50,7 +63,7 @@ fn add_proyect_path(text: &str) -> Result<(), String> {
     let res = OpenOptions::new()
         .write(true)
         .append(true)
-        .open("proyects.txt");
+        .open(get_exe_path());
 
     if let Err(e) = res {
         return Err(e.to_string());

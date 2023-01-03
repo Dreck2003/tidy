@@ -5,4 +5,4 @@ pub const OPEN: &str = "open";
 pub const HELP: &str = "--help";
 pub const HELP_SHORT: &str = "-h";
 
-pub const FIRST_LEVEL_ARGS: [&str; 6] = ["list", "add", "new", "select", "--help", "-h"];
+pub const FIRST_LEVEL_ARGS: [&str; 6] = [LIST, ADD, NEW, OPEN, HELP, HELP_SHORT];
