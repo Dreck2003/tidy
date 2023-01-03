@@ -1,6 +1,9 @@
+mod cli;
 mod colors;
-use colors::utils::Color;
+mod messages;
+mod utils;
+use cli::run;
 
 fn main() {
-    Color::yellow("Hello, world!").println()
+    run();
 }
